@@ -1,0 +1,143 @@
+{
+  "date": "2026-10-30",
+  "before": {
+    "version": 31,
+    "page": "https://descobridor.online/puxar-dados-pelo-telefone",
+    "sourceEvidence": {
+      "mainDocumentH1": 0,
+      "mainDocumentIframes": 1,
+      "waveSvgUncompressedBytes": 399400
+    },
+    "pagespeed": {
+      "reportMobile": "https://pagespeed.web.dev/analysis/https-descobridor-online-puxar-dados-pelo-telefone/abmedf9i4o?form_factor=mobile",
+      "reportDesktop": "https://pagespeed.web.dev/analysis/https-descobridor-online-puxar-dados-pelo-telefone/abmedf9i4o?form_factor=desktop",
+      "lighthouseVersion": "13.6.0",
+      "mobile": {
+        "performance": null,
+        "fcp": null,
+        "lcp": null,
+        "tbt": null,
+        "cls": 0,
+        "error": "NO_FCP",
+        "rawOtherScores": {
+          "accessibility": 100,
+          "bestPractices": 100,
+          "seo": 100
+        }
+      },
+      "desktop": {
+        "performance": null,
+        "fcp": null,
+        "lcp": null,
+        "tbt": null,
+        "cls": 0.525,
+        "error": "NO_FCP",
+        "rawOtherScores": {
+          "accessibility": 100,
+          "bestPractices": 100,
+          "seo": 100
+        }
+      },
+      "caveat": "A execução não desenhou conteúdo. Pontuações das demais categorias não comprovam a qualidade da página completa. CLS são observações de laboratório desta execução incompleta, não percentil 75 em campo.",
+      "crux": "Nenhum dado"
+    }
+  },
+  "afterInitialPublication": {
+    "version": 32,
+    "page": "https://descobridor.online/puxar-dados-pelo-telefone",
+    "pagespeed": {
+      "reportMobile": "https://pagespeed.web.dev/analysis/https-descobridor-online-puxar-dados-pelo-telefone/tjaa1pxinb?form_factor=mobile",
+      "reportDesktop": "https://pagespeed.web.dev/analysis/https-descobridor-online-puxar-dados-pelo-telefone/tjaa1pxinb?form_factor=desktop",
+      "lighthouseVersion": "13.6.0",
+      "mobile": {
+        "performance": null,
+        "fcpMs": 960,
+        "lcpMs": null,
+        "tbtMs": null,
+        "cls": 0,
+        "speedIndexMs": 4234,
+        "error": "NO_LCP",
+        "accessibility": 96,
+        "bestPractices": 100,
+        "seo": 100
+      },
+      "desktop": {
+        "performance": 100,
+        "fcpMs": 262,
+        "lcpMs": 262,
+        "tbtMs": 0,
+        "cls": 0,
+        "speedIndexMs": 603,
+        "accessibility": 96,
+        "bestPractices": 100,
+        "seo": 100
+      },
+      "crux": "Nenhum dado",
+      "notes": "Contraste de textos pequenos do rodapé e identificação de links Início corrigidos após esta execução. Mobile sem medição conclusiva de LCP."
+    },
+    "richResults": {
+      "url": "https://search.google.com/test/rich-results/result?id=_TxocuXFBGiVmGXwN7mNdw",
+      "validItems": 2,
+      "types": [
+        "Organization",
+        "BreadcrumbList"
+      ]
+    },
+    "observed": {
+      "wwwRedirectedToApex": true,
+      "phoneMainH1Count": 1,
+      "phoneIframesWithoutConsent": 0,
+      "phoneRobots": "index, follow",
+      "phoneCanonical": "https://descobridor.online/puxar-dados-pelo-telefone",
+      "checkedPublicRoutes": [
+        "/",
+        "/descobrir-data-de-nascimento",
+        "/localizar-pessoa-pelo-cpf",
+        "/puxar-dados-pelo-telefone",
+        "/termos",
+        "/privacidade",
+        "/pacotes"
+      ],
+      "notFoundRoute": "/nao-existe-auditoria-seo",
+      "notFoundRobots": "noindex"
+    },
+    "assetOptimization": {
+      "socialPngBytes": 1685525,
+      "socialWebpBytes": 42286,
+      "width": 1200,
+      "height": 628
+    }
+  },
+  "finalMeasurement": {
+    "versionMeasured": 33,
+    "reportMobile": "https://pagespeed.web.dev/analysis/https-descobridor-online-puxar-dados-pelo-telefone/1i403cn2eu?form_factor=mobile",
+    "reportDesktop": "https://pagespeed.web.dev/analysis/https-descobridor-online-puxar-dados-pelo-telefone/1i403cn2eu?form_factor=desktop",
+    "lighthouseVersion": "13.6.0",
+    "capturedAt": "2026-10-30 04:56 BRT",
+    "mobile": {
+      "performance": 100,
+      "accessibility": 100,
+      "bestPractices": 100,
+      "seo": 100,
+      "fcpMs": 938,
+      "lcpMs": 1876,
+      "tbtMs": 9,
+      "cls": 0,
+      "speedIndexMs": 1784
+    },
+    "desktop": {
+      "performance": 100,
+      "accessibility": 100,
+      "bestPractices": 100,
+      "seo": 100,
+      "fcpMs": 292,
+      "lcpMs": 440,
+      "tbtMs": 8,
+      "cls": 0,
+      "speedIndexMs": 587
+    },
+    "crux": "Nenhum dado",
+    "inpP75": null,
+    "caveat": "Resultados de laboratório de uma execução, não métricas de campo nem garantia de ranking. Ajustes finais de texto do CTA, sua quebra responsiva e lastmod posteriores à medição não foram medidos novamente."
+  }
+}

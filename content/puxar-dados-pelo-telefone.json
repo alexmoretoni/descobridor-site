@@ -1,0 +1,98 @@
+{
+  "title": "Puxar Dados pelo Telefone: Consulta com DDD | Descobridor",
+  "description": "Quer puxar dados pelo telefone? Saiba como consultar números de celular ou fixo, identificar contatos desconhecidos e verificar informações disponíveis.",
+  "heading": "Puxar Dados pelo Telefone: Consulte um Número Online",
+  "intro": "Quer consultar um número de telefone ou verificar informações sobre um contato desconhecido? Utilize o Descobridor para solicitar a conferência de informações disponíveis sobre celular e telefone fixo, respeitando as condições de acesso e proteção de dados.",
+  "sections": [
+    {
+      "title": "Como Consultar Dados pelo Número de Telefone?",
+      "paragraphs": [
+        "O processo de consulta pelo número de telefone começa com a referência e a identificação do solicitante. Veja as etapas:"
+      ],
+      "subheadings": [
+        {
+          "title": "Informe o número com DDD",
+          "paragraphs": [
+            "Informe o número com DDD. O formulário aceita celular e telefone fixo brasileiros e valida o formato informado."
+          ]
+        },
+        {
+          "title": "Inicie a solicitação de consulta",
+          "paragraphs": [
+            "Inicie a solicitação. Preencha nome, telefone e e-mail na modal de cadastro para conferir o resumo e o valor no checkout."
+          ]
+        },
+        {
+          "title": "Confirme as informações disponíveis",
+          "paragraphs": [
+            "Verifique as informações disponíveis com a equipe. A Descobridor registra o pedido para atendimento; não realiza pesquisa automática em bases externas. A fonte, a cobertura e o prazo são confirmados antes da contratação."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Como Descobrir de Quem É um Número Desconhecido?",
+      "paragraphs": [
+        "Antes de retornar uma ligação desconhecida, compare o número com os canais divulgados pela própria empresa ou profissional. Um telefone publicado como contato comercial pode ajudar nessa conferência, mas não comprova quem realizou uma chamada.",
+        "Números podem ser reutilizados, transferidos ou falsificados na identificação de chamadas. Este serviço não oferece identificação irrestrita de pessoas físicas nem divulgação de CPF, endereço ou outros dados privados a partir de um telefone."
+      ]
+    },
+    {
+      "title": "Consulta de Celular e Telefone Fixo com DDD",
+      "paragraphs": [
+        "Para consultar telefone com DDD, informe dois dígitos de código de área seguidos de oito dígitos para fixo ou nove para celular: (11) 3456-7890 ou (11) 99999-9999. O formulário adapta a máscara. Validar o formato não confirma que o número está ativo, quem é o titular ou se existem informações disponíveis.",
+        "Para conferir seu próprio cadastro ou um cadastro autorizado, o atendimento pode solicitar esclarecimentos e comprovação de titularidade ou autorização. Não envie documentos no campo de telefone."
+      ]
+    },
+    {
+      "title": "Como Verificar um Número de Telefone Suspeito?",
+      "paragraphs": [
+        "Em ligações inesperadas, cobranças desconhecidas ou mensagens com pedido de pagamento, confirme a procedência por um canal oficial que você já conheça. Não compartilhe senhas, códigos de autenticação, documentos ou informações bancárias apenas porque alguém entrou em contato.",
+        "Uma conferência de telefone não comprova a identidade de quem liga. Se houver dúvida, interrompa a conversa e procure diretamente a empresa pelos contatos oficiais."
+      ]
+    },
+    {
+      "title": "Consulta pelo Telefone e Proteção de Dados",
+      "paragraphs": [
+        "Solicite somente dados próprios, autorizados ou informações comerciais que o próprio responsável tenha disponibilizado publicamente. O fato de uma informação estar acessível não autoriza qualquer forma de uso ou divulgação.",
+        "O cadastro registra seus contatos para atendimento, inclusive se a solicitação não for concluída. A referência do telefone é mantida de forma mascarada nos registros do pedido. Conheça a política de privacidade e esclareça a finalidade da sua solicitação com a equipe.",
+        "Não há fornecedor externo de dados integrado a este formulário. Quando uma verificação for possível, o atendimento deve esclarecer a fonte e as condições de uso. Para informações comerciais públicas, prefira os contatos publicados pela própria empresa; para dados pessoais, a solicitação depende de titularidade ou autorização e da avaliação da equipe.",
+        "Para esclarecer o tratamento dos seus contatos, pedir acesso, correção ou exclusão quando aplicável, escreva para contato@descobridor.online. A política de privacidade descreve o registro dos formulários, inclusive de solicitações não concluídas."
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "question": "Como puxar dados pelo telefone?",
+      "answer": "Informe o telefone com DDD, preencha o cadastro e confira o resumo no checkout. O envio registra uma solicitação. O atendimento confirma quais categorias podem ser verificadas, suas fontes e limitações."
+    },
+    {
+      "question": "Como saber de quem é um número de celular?",
+      "answer": "Compare o número com identificações e contatos comerciais publicados pelo próprio responsável. Esta página não revela automaticamente a identidade de uma pessoa física a partir do telefone."
+    },
+    {
+      "question": "É possível consultar um telefone fixo?",
+      "answer": "O formulário aceita números brasileiros com DDD: dez dígitos para fixo ou onze para celular. A validação é apenas de formato; a cobertura das informações depende do atendimento."
+    },
+    {
+      "question": "Como identificar um número desconhecido?",
+      "answer": "Você pode solicitar orientação para conferir um contato comercial público ou dados autorizados. Nem toda solicitação permite identificação, e o número exibido em uma ligação pode não ser confiável."
+    },
+    {
+      "question": "A consulta de telefone é gratuita?",
+      "answer": "Enviar o cadastro não gera cobrança. O valor do relatório e suas condições aparecem no checkout e são confirmados no atendimento antes da contratação."
+    },
+    {
+      "question": "É legal consultar dados pelo telefone?",
+      "answer": "A finalidade e a forma de tratamento importam. A Descobridor recebe solicitações de dados próprios ou autorizados e de contatos comerciais públicos, sujeitas à avaliação no atendimento. A LGPD não transforma dados pessoais em informação de livre acesso; esclarecer a fonte e as condições é necessário antes de qualquer contratação."
+    },
+    {
+      "question": "Os resultados são atualizados?",
+      "answer": "Não há garantia de cobertura ou atualização. Informações públicas podem estar incompletas ou desatualizadas, e números podem mudar de titular."
+    },
+    {
+      "question": "Como identificar uma ligação suspeita?",
+      "answer": "Confirme o contato por canais oficiais e nunca compartilhe senhas, códigos ou dados financeiros com quem apenas se identificou por telefone. A consulta não comprova a identidade de quem fez a ligação."
+    }
+  ]
+}

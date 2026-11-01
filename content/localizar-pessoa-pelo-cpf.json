@@ -1,0 +1,59 @@
+{
+  "title": "Localizar pessoa pelo CPF: consulta cadastral | Descobridor",
+  "description": "Entenda a busca por localizar pessoa pelo CPF. Solicite orientação para conferência cadastral de dados próprios ou autorizados com a Descobridor.",
+  "heading": "Localizar pessoa pelo CPF",
+  "intro": "Precisa conferir um cadastro com autorização do titular? Informe o CPF e solicite orientação para verificar os próximos passos do atendimento.",
+  "sections": [
+    {
+      "title": "Localizar pessoa pelo CPF: entenda o que você está solicitando",
+      "paragraphs": [
+        "Quem pesquisa como localizar pessoa pelo CPF pode estar tentando confirmar a identidade de um cadastro ou recuperar contato com alguém. Essas necessidades exigem cuidados diferentes. Uma referência cadastral não indica onde uma pessoa está e não substitui o contato direto com o titular.",
+        "Na Descobridor, este formulário registra uma solicitação de orientação cadastral. O atendimento avalia a finalidade, a titularidade ou autorização e a disponibilidade antes de confirmar qualquer serviço. Não há rastreamento, localização em tempo real nem divulgação automática de endereços ou contatos privados."
+      ]
+    },
+    {
+      "title": "Consulta pelo CPF com identificação do solicitante",
+      "paragraphs": [
+        "O CPF funciona como referência do seu pedido. Após informar um documento com formato válido, você identifica o solicitante com nome, telefone e e-mail. O cadastro é salvo antes de abrir o resumo do checkout, na mesma página.",
+        "O resumo permite conferir a referência digitada e o valor apresentado para a solicitação do relatório. Isso não significa que dados foram encontrados. A equipe confirma a disponibilidade, as condições e os próximos passos no atendimento."
+      ]
+    },
+    {
+      "title": "Quer retomar contato com uma pessoa?",
+      "paragraphs": [
+        "Prefira canais que a própria pessoa tenha disponibilizado para contato, como um perfil profissional público, ou peça a um conhecido em comum que encaminhe sua mensagem. Assim, o titular pode decidir se deseja responder sem ter seus dados privados expostos.",
+        "Para conferir um cadastro de outra pessoa, solicite a participação e a autorização dela. Documentos e esclarecimentos adicionais podem ser necessários. Esta página não oferece busca anônima de pessoas nem acesso irrestrito a informações pessoais."
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "question": "Como localizar uma pessoa pelo CPF na Descobridor?",
+      "answer": "A Descobridor recebe solicitações de orientação cadastral para dados próprios ou autorizados. Informe o CPF, identifique-se e confira o resumo do pedido. O formulário não localiza uma pessoa nem revela informações privadas automaticamente."
+    },
+    {
+      "question": "O CPF mostra onde uma pessoa está agora?",
+      "answer": "Não. Esta página não possui rastreamento nem geolocalização de pessoas. Uma referência cadastral não informa a localização atual do titular."
+    },
+    {
+      "question": "Posso encontrar endereço ou telefone de alguém sem autorização?",
+      "answer": "Esta página não oferece esse serviço. Para retomar contato, utilize canais públicos disponibilizados pelo próprio titular ou peça que alguém encaminhe sua mensagem. A conferência cadastral depende de titularidade ou autorização."
+    },
+    {
+      "question": "O que acontece depois de informar o CPF?",
+      "answer": "Você preenche nome, telefone e e-mail em um cadastro compacto. O cadastro é registrado e o checkout apresenta o serviço, a referência e o preço. A disponibilidade das informações ainda precisa ser confirmada no atendimento."
+    },
+    {
+      "question": "Localizar pessoa pelo CPF é gratuito nesta página?",
+      "answer": "Enviar o cadastro não gera cobrança. O checkout apresenta o valor da solicitação de relatório, e eventuais condições de contratação são confirmadas com a equipe. Não prometemos localização gratuita nem resultados garantidos."
+    },
+    {
+      "question": "Como a referência do CPF é protegida?",
+      "answer": "A referência completa aparece apenas durante sua sessão de conferência. Os registros do atendimento guardam uma referência mascarada e os contatos que você informou."
+    },
+    {
+      "question": "Como continuar o atendimento?",
+      "answer": "Depois de conferir o checkout, solicite o relatório completo. O pedido é registrado e, quando o WhatsApp estiver configurado, você pode continuar a conversa pelo canal de atendimento."
+    }
+  ]
+}

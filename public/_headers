@@ -1,0 +1,14 @@
+/interface
+  X-Robots-Tag: noindex, follow
+/interface.html
+  X-Robots-Tag: noindex, follow
+/data-de-nascimento.html
+  X-Robots-Tag: noindex, follow
+/site.*.css
+  Cache-Control: public, max-age=31536000, immutable
+/site-runtime.*.js
+  Cache-Control: public, max-age=31536000, immutable
+/images/*
+  Cache-Control: public, max-age=604800
+/wave.svg
+  Cache-Control: public, max-age=604800
