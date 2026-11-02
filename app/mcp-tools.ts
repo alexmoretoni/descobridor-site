@@ -8,9 +8,10 @@ import {settings,publicSettings} from './settings';
 import {dashboardPost} from './dashboard-api';
 import {read,connectionId,reportsFor} from './google-oauth';
 import {audit} from './admin-actions';
+import {extensionTools,extensionCall,controlledCall} from './mcp-extension';
 const str={type:'string'};
 const schema=(properties:Record<string,unknown>={},required:string[]=[])=>({type:'object',properties,required,additionalProperties:false});
-const tool=(name:string,description:string,inputSchema:unknown,write=false)=>({name,description,inputSchema,annotations:{readOnlyHint:!write,destructiveHint:write,idempotentHint:!write,openWorldHint:name==='google_reports'}});
+const tool=(name:string,description:string,inputSchema:ReturnType<typeof schema>,write=false)=>({name,description:description+(write?' Ações sensíveis podem retornar approval_required; aprove no admin e repita com approvalId.':''),inputSchema:{...inputSchema,properties:{...inputSchema.properties,approvalId:{type:'string'}}},annotations:{readOnlyHint:!write,destructiveHint:write,idempotentHint:!write,openWorldHint:name==='google_reports'}});
 export const mcpTools=[
  tool('capabilities','Descreve o alcance real e as limitações deste MCP.',schema()),
  tool('page_history','Consulta versões anteriores de uma página para recuperação.',schema({slug:str},['slug'])),
@@ -24,9 +25,15 @@ export const mcpTools=[
  tool('get_public_settings','Lê contatos e configurações públicas do site, sem segredos ou tokens.',schema()),
  tool('google_connection_status','Informa se a identidade administrativa tem uma conta Google conectada. Não revela credenciais.',schema()),
  tool('google_reports','Consulta relatórios reais de Search Console e GA4 dos últimos 28 dias nas propriedades já selecionadas pelo administrador. Exige conexão OAuth prévia. Não altera propriedades ou campanhas.',schema())
-];
+,...extensionTools];
 
-export async function callMcp(name:string,args:unknown){const {user,admin}=await identity();if(!user||!admin)throw Error('Somente a identidade administrativa autorizada pode usar estas ferramentas.');if(!await mcpEnabled())throw Error('MCP desativado no painel administrativo.');const def=mcpTools.find(t=>t.name===name);if(!def)throw Error('Ferramenta desconhecida.');if(!args||typeof args!=='object'||Array.isArray(args))throw Error('Argumentos inválidos.');const a=args as Record<string,any>,spec=def.inputSchema as ReturnType<typeof schema>;if(Object.keys(a).some(k=>!Object.hasOwn(spec.properties,k))||spec.required.some(k=>!Object.hasOwn(a,k)))throw Error('Confira os campos obrigatórios e permitidos.');
+export async function callMcp(name:string,args:unknown){
+ const {user,admin}=await identity();if(!user||!admin)throw Error('Somente a identidade administrativa autorizada pode usar estas ferramentas.');
+ if(!mcpTools.some(t=>t.name===name))throw Error('Ferramenta desconhecida.');
+ return controlledCall(name,args,user.userId,mcpTools.map(t=>t.name),a=>extensionTools.some(t=>t.name===name)?extensionCall(name,a,user.userId):legacyCall(name,a));
+}
+
+async function legacyCall(name:string,args:unknown){const {user,admin}=await identity();if(!user||!admin)throw Error('Somente a identidade administrativa autorizada pode usar estas ferramentas.');if(!await mcpEnabled())throw Error('MCP desativado no painel administrativo.');const def=mcpTools.find(t=>t.name===name);if(!def)throw Error('Ferramenta desconhecida.');if(!args||typeof args!=='object'||Array.isArray(args))throw Error('Argumentos inválidos.');const a=args as Record<string,any>,spec=def.inputSchema as ReturnType<typeof schema>;if(Object.keys(a).some(k=>!Object.hasOwn(spec.properties,k))||spec.required.some(k=>!Object.hasOwn(a,k)))throw Error('Confira os campos obrigatórios e permitidos.');
  if(name==='list_pages')return (await listPages()).map(p=>({slug:p.slug,name:p.name,status:p.status,template:p.template,seoTitle:p.seoTitle,updatedAt:p.updatedAt}));
  if(name==='get_page'){if(typeof a.slug!=='string')throw Error('Slug inválido.');const p=await getPage(a.slug);if(!p)throw Error('Página não encontrada.');return p}
  if(name==='list_products')return getDb().select().from(packages);

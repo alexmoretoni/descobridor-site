@@ -1,0 +1,61 @@
+name: MCP checks
+on:
+  workflow_dispatch:
+    inputs:
+      operation:
+        required: true
+        type: choice
+        options: [run_typecheck, run_tests, run_build]
+      source_ref:
+        required: true
+        type: string
+      source_sha:
+        required: true
+        type: string
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      REQUESTED_OPERATION: ${{ inputs.operation }}
+      REQUESTED_REF: ${{ inputs.source_ref }}
+      REQUESTED_SHA: ${{ inputs.source_sha }}
+    steps:
+      - name: Validate request
+        shell: bash
+        run: |
+          [[ "$REQUESTED_REF" =~ ^mcp/[a-zA-Z0-9][a-zA-Z0-9/_-]{0,100}$ ]] || exit 1
+          [[ "$REQUESTED_SHA" =~ ^[a-f0-9]{40}$ ]] || exit 1
+          case "$REQUESTED_OPERATION" in run_typecheck|run_tests|run_build) ;; *) exit 1 ;; esac
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.source_sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.25.0
+          run_install: false
+      - run: pnpm install --frozen-lockfile
+      - name: TypeScript
+        if: inputs.operation == 'run_typecheck' || inputs.operation == 'run_build'
+        run: pnpm exec tsc --noEmit
+      - name: Regression tests
+        if: inputs.operation == 'run_tests' || inputs.operation == 'run_build'
+        run: pnpm run test:regression
+      - name: MCP control tests
+        if: inputs.operation == 'run_tests' || inputs.operation == 'run_build'
+        run: node scripts/tests/mcp-control.mjs
+      - name: Production build
+        if: inputs.operation == 'run_build'
+        run: pnpm build
+      - uses: actions/upload-artifact@v4
+        if: inputs.operation == 'run_build' && success()
+        with:
+          name: mcp-build-${{ inputs.source_sha }}
+          path: dist/
+          retention-days: 7
