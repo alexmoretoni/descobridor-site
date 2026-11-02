@@ -1,0 +1,63 @@
+import assert from 'node:assert/strict';
+import {DatabaseSync} from 'node:sqlite';
+import {createRequire} from 'node:module';
+import {mkdtempSync,readFileSync,readdirSync,rmSync} from 'node:fs';
+import {tmpdir} from 'node:os';
+import {join} from 'node:path';
+import {pathToFileURL} from 'node:url';
+const require=createRequire(import.meta.url),{build}=require(require.resolve('esbuild',{paths:[require.resolve('vite')]}));
+const temp=mkdtempSync(join(tmpdir(),'commerce-tests-')),db=new DatabaseSync(':memory:');
+for(const f of readdirSync('drizzle').filter(f=>f.endsWith('.sql')).sort())db.exec(readFileSync('drizzle/'+f,'utf8'));
+class Statement{constructor(sql){this.sql=sql;this.params=[];}bind(...p){this.params=p;return this;}async all(){return {results:db.prepare(this.sql).all(...this.params),success:true};}async first(){return (await this.all()).results[0]||null;}async run(){const v=db.prepare(this.sql).run(...this.params);return {success:true,meta:{changes:v.changes}};}async raw(){return (await this.all()).results.map(r=>Object.values(r));}}
+globalThis.__commerceEnv={ADMIN_EMAIL:'admin@example.com',ADMIN_SESSION_SECRET:'test-only-'.repeat(5),DB:{prepare(sql){return new Statement(sql);},async batch(stmts){db.exec('BEGIN');try{const r=[];for(const s of stmts){const results=(await s.all()).results;r.push({results,success:true,meta:{changes:db.prepare('SELECT changes() n').get().n}});}db.exec('COMMIT');return r;}catch(e){db.exec('ROLLBACK');throw e;}}}};
+globalThis.__commerceHeaders=new Headers();
+const plugin={name:'runtime-mock',setup(b){b.onResolve({filter:/^(cloudflare:workers|next\/headers|next\/navigation)$/},a=>({path:a.path,namespace:'mock'}));b.onLoad({filter:/.*/,namespace:'mock'},a=>({contents:a.path==='cloudflare:workers'?'export const env=globalThis.__commerceEnv':a.path==='next/headers'?'export async function headers(){return globalThis.__commerceHeaders}':'export function redirect(p){throw Error(p)}',loader:'js'}));}};
+async function bundle(entry,n){const outfile=join(temp,n+'.mjs');await build({entryPoints:[entry],outfile,platform:'node',format:'esm',bundle:true,plugins:[plugin],logLevel:'silent'});return import(pathToFileURL(outfile));}
+const request=(path,body,origin='https://test.local')=>new Request('https://test.local'+path,{method:'POST',headers:{origin,'content-type':'application/json'},body:JSON.stringify(body)});
+try{
+ const commerce=await bundle('app/commerce.ts','commerce'),admin=await bundle('app/api/commerce/route.ts','admin'),quoteApi=await bundle('app/api/quote/route.ts','quote'),order=await bundle('app/api/orders/route.ts','orders'),security=await bundle('app/admin-security.ts','security');
+ assert.equal((await admin.GET()).status,403);
+ globalThis.__commerceHeaders=new Headers({'oai-authenticated-user-id':'owner','oai-authenticated-user-email':'admin@example.com'});
+ assert.equal((await admin.GET()).status,403,'Owner identity alone cannot change prices');
+ db.prepare('INSERT INTO admin_security (user_id,salt,password_hash,version,updated_at) VALUES (?,?,?,?,?)').run('owner','test','test','v1',new Date().toISOString());
+ globalThis.__commerceHeaders.set('cookie',(await security.sessionCookie('owner','v1')).split(';')[0]);
+ assert.equal((await admin.GET()).status,200);
+ assert.equal((await admin.POST(request('/api/commerce',{action:'rule',rule:{pageSlug:null,queryType:'CPF',mode:'price',priceCents:100}},'https://wrong.local'))).status,400);
+ const product={id:'cpf-plan',kind:'plan',name:'Plano CPF',description:'Atendimento por CPF',priceCents:3990,bonusCents:0,credits:3,active:true,visible:false,queryTypes:['CPF']};
+ assert.equal((await admin.POST(request('/api/commerce',{action:'product',product:{...product,priceCents:-1}}))).status,400);
+ assert.equal((await admin.POST(request('/api/commerce',{action:'product',product}))).status,200);
+ assert.equal((await commerce.commerceData()).products[0].visible,false,'Product visibility metadata survives reading');
+ assert.equal((await commerce.publicCatalog()).length,0);
+ await assert.rejects(()=>commerce.resolveQuote({queryType:'CPF',productId:product.id}),/indisponível/);
+ const cpfRule={pageSlug:null,queryType:'CPF',mode:'price',priceCents:2490};
+ const pageRule={pageSlug:'home',queryType:'all',mode:'price',priceCents:2990};
+ const pinned={pageSlug:'home',queryType:'CPF',mode:'product',productId:product.id};
+ for(const rule of [cpfRule,pageRule,pinned])assert.equal((await admin.POST(request('/api/commerce',{action:'rule',rule}))).status,200);
+ assert.equal((await commerce.resolveQuote({queryType:'CPF'})).amountCents,2490);
+ assert.equal((await commerce.resolveQuote({queryType:'Telefone',pageSlug:'home'})).amountCents,2990);
+ const q=await commerce.resolveQuote({queryType:'CPF',pageSlug:'home'});assert.equal(q.amountCents,3990);assert.equal(q.pinned,true);assert.equal(q.offers.length,1,'Hidden products can be explicitly pinned');
+ assert.equal((await commerce.resolveQuote({queryType:'Telefone'})).amountCents,1990);
+ assert.equal((await quoteApi.GET(new Request('https://test.local/api/quote?type=invalid'))).status,400);
+ await assert.rejects(()=>commerce.resolveQuote({queryType:'CPF',pageSlug:'does-not-exist'}));
+ await assert.rejects(()=>commerce.resolveQuote({queryType:'CPF',pageSlug:'home',productId:'other'}));
+ // Anonymous checkout uses the exact server quote and ignores a forged amount.
+ globalThis.__commerceHeaders=new Headers();
+ const body={phone:'47999999999',name:'',email:'',deliveryFlow:'whatsapp',consent:true,queryType:'CPF',queryMasked:'***.***.***-91',pageSlug:'home',idempotencyKey:crypto.randomUUID(),quoteKey:q.quoteKey,amountCents:1};
+ let response=await order.POST(request('/api/orders',body));assert.equal(response.status,200);const saved=await response.json();
+ const record=db.prepare('SELECT * FROM orders WHERE id=?').get(saved.orderId);assert.equal(record.amount_cents,3990);assert.equal(record.product_id,product.id);assert.equal(JSON.parse(record.checkout_snapshot).pricingSource,'page');
+ assert.equal((await order.POST(request('/api/orders',body))).status,200);assert.equal(db.prepare('SELECT count(*) n FROM orders').get().n,1);assert.equal(db.prepare('SELECT count(*) n FROM leads').get().n,1);
+ globalThis.__commerceHeaders=new Headers({'oai-authenticated-user-id':'owner','oai-authenticated-user-email':'admin@example.com','cookie':(await security.sessionCookie('owner','v1')).split(';')[0]});
+ assert.equal((await admin.POST(request('/api/commerce',{action:'product',product:{...product,visible:true,priceCents:4990}}))).status,200);
+ assert.equal((await commerce.publicCatalog()).length,1);
+ globalThis.__commerceHeaders=new Headers();
+ assert.equal((await order.POST(request('/api/orders',{...body,idempotencyKey:crypto.randomUUID()}))).status,409,'Changed price must be confirmed again');
+ assert.equal(db.prepare('SELECT count(*) n FROM orders').get().n,1);
+ globalThis.__commerceHeaders=new Headers({'oai-authenticated-user-id':'owner','oai-authenticated-user-email':'admin@example.com','cookie':(await security.sessionCookie('owner','v1')).split(';')[0]});
+ assert.equal((await admin.POST(request('/api/commerce',{action:'removeRule',rule:pinned}))).status,200);
+ assert.equal((await commerce.resolveQuote({queryType:'CPF',pageSlug:'home'})).amountCents,2990);
+ await assert.rejects(()=>commerce.resolveQuote({queryType:'Telefone',productId:product.id}));
+ assert.equal((await admin.POST(request('/api/commerce',{action:'product',product:{...product,active:false}}))).status,200);
+ assert.equal((await commerce.publicCatalog()).length,0);
+ assert.ok(db.prepare('SELECT count(*) n FROM audit_logs WHERE action LIKE ?').get('commerce_%').n>=7);
+ console.log('PASS: commerce admin identity/password/CSRF, product/plan validation, atomic saves/audit, visibility, availability, query eligibility, rule precedence, pinned hidden offers, server-only prices, quote drift and idempotent orders/leads.');
+}finally{db.close();rmSync(temp,{recursive:true,force:true});}

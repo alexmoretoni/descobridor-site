@@ -1,4 +1,5 @@
 (()=>{
+ const onReady=fn=>{if(document.readyState&&document.readyState!=='loading')queueMicrotask(fn);else document.addEventListener('DOMContentLoaded',fn,{once:true});};
  const allowed=new Set(['page_view','form_start','form_submit','consulta_iniciada','consulta_concluida']);
  const sent=new Set(),pending=new Map();let flow=0,ready=false;
  const eligible=()=>!clientFlow&&!flowParams.has('editorPreview')&&!['termos','privacidade'].includes(cmsSlug)&&!['#termos','#privacidade'].includes(location.hash);
@@ -20,5 +21,5 @@
   document.getElementById('accepttracking').onclick=()=>{localStorage.setItem('cc_tracking_consent','accepted');box.remove();window.siteAnalyticsConsent()};
   document.getElementById('rejecttracking').onclick=()=>{localStorage.setItem('cc_tracking_consent','rejected');box.remove()};
  };
- document.addEventListener('DOMContentLoaded',()=>document.getElementById('query')?.addEventListener('focus',()=>window.analyticsTrack('form_start'),{once:true}));
+ onReady(()=>document.getElementById('query')?.addEventListener('focus',()=>window.analyticsTrack('form_start'),{once:true}));
 })();

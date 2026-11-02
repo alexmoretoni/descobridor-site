@@ -1,9 +1,7 @@
-import {getDb} from '../db';
-import {packages} from '../db/schema';
-import {eq} from 'drizzle-orm';
+import {publicCatalog} from './commerce';
 import {listPages,pageUrl,type SitePage} from './pages';
 export function eligiblePages(pages:SitePage[],hasProducts:boolean){return pages.filter(p=>p.status==='published'&&p.indexable&&/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(p.slug)&&(p.template!=='packages'||hasProducts)&&(!p.options?.canonicalUrl||p.options.canonicalUrl===pageUrl(p.slug))).sort((a,b)=>a.slug.localeCompare(b.slug))}
-export async function discoveryPages(){const [pages,products]=await Promise.all([listPages(),getDb().select({id:packages.id}).from(packages).where(eq(packages.active,1)).limit(1)]);return eligiblePages(pages,products.length>0)}
+export async function discoveryPages(){const [pages,products]=await Promise.all([listPages(),publicCatalog()]);return eligiblePages(pages,products.length>0)}
 export const xmlEscape=(value:string)=>value.replace(/[<>&"']/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&apos;'}[c]!));
 export function sitemapXml(pages:SitePage[]){return '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+pages.map(p=>'<url><loc>'+xmlEscape(pageUrl(p.slug))+'</loc>'+(p.updatedAt&&Number.isFinite(Date.parse(p.updatedAt))?'<lastmod>'+new Date(p.updatedAt).toISOString()+'</lastmod>':'')+'</url>').join('')+'</urlset>'}
 const line=(s:string)=>s.replace(/[\r\n\t]+/g,' ').replace(/[\\[\]<>]/g,'').trim();
