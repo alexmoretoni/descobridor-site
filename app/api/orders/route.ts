@@ -11,9 +11,12 @@ export async function POST(request: Request) {
  if(!request.headers.get('content-type')?.includes('application/json'))return Response.json({error:'Formato inválido.'},{status:415});
  if(Number(request.headers.get('content-length')||0)>4096)return Response.json({error:'Pedido muito grande.'},{status:413});
  let body; try{const raw=await request.text();if(raw.length>4096)throw Error();body=JSON.parse(raw)}catch{return Response.json({error:'Pedido inválido.'},{status:400})}
- const name=String(body.name||'').trim(),phone=String(body.phone||'').replace(/\D/g,''),email=String(body.email||'').trim();
+ const delivery=body.deliveryFlow==='whatsapp';
+ const name=String(body.name||'').trim()||(delivery?'Nome não informado':''),phone=String(body.phone||'').replace(/\D/g,''),email=String(body.email||'').trim();
  const key=String(body.idempotencyKey||'');
- if(name.length<3||name.length>100||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)||email.length>254||!/^(55)?\d{10,11}$/.test(phone)||body.consent!==true||!/^[a-f0-9-]{36}$/i.test(key))return Response.json({error:'Confira nome, telefone com DDD, e-mail e autorização de contato.'},{status:400});
+ const validEmail=delivery&&!email||/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+ if(delivery&&!/^(?:55)?[1-9]{2}(?:9\d{8}|[2-5]\d{7})$/.test(phone))return Response.json({error:'Informe um telefone válido com DDD.'},{status:400});
+ if(name.length<3||name.length>100||!validEmail||email.length>254||!/^(55)?\d{10,11}$/.test(phone)||body.consent!==true||!/^[a-f0-9-]{36}$/i.test(key))return Response.json({error:delivery?'Confira o telefone com DDD e a autorização de contato.':'Confira nome, telefone com DDD, e-mail e autorização de contato.'},{status:400});
  const type=['CPF','CNPJ','Nome','Telefone','CEP','Veículo'].includes(body.queryType)?body.queryType:'CPF';
  const masked=type==='Nome'?'Nome protegido':/^(?:\*{3}\.\*{3}\.\*{3}-\d{2}|\(\*{2}\) \*{5}-\*{2}\d{2}|Placa \*{3}-\*{2}[A-Z0-9]{2})$/.test(body.queryMasked)?body.queryMasked:'Identificador oculto';
  try{

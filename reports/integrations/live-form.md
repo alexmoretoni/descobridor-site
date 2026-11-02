@@ -2,7 +2,7 @@
 
 O formulário valida localmente o formato: CPF com dígitos verificadores e telefone brasileiro com DDD. O selo verde diz Formato verificado, sem prometer consulta oficial ou titularidade confirmada. CPF e telefone recebem máscara; validação após pausa de digitação mostra estado de verificação.
 
-Fluxo: referência → cadastro com nome e telefone → persistência de lead parcial → animação de preparação → prévia ilustrativa → checkout com e-mail e autorização de contato → POST /api/orders → pedido, lead e cliente → URL WhatsApp retornada pelo servidor. O backend continua definindo o preço e usando idempotência. A referência completa existe somente na sessão; o backend recebe a versão mascarada.
+Fluxo atualizado: referência → animação de preparação → prévia ilustrativa sem cadastro intermediário → Gerar pedido agora → caixa de entrega animada com telefone WhatsApp e referência consultada lado a lado → botão liberado pelo formato válido do telefone → POST /api/orders → pedido, lead e cliente → URL WhatsApp retornada pelo servidor. Nome e e-mail não são exigidos neste fluxo. O backend identifica o nome como não informado, mantém o preço do servidor e a idempotência. A referência completa existe somente na sessão; o backend recebe a versão mascarada. A validação não confirma uma conta WhatsApp ativa.
 
 Prévia com nome e nascimento totalmente mascarados; referência digitada completa. Cards com situação, RG, mãe/pai, quatro endereços fictícios, três parentes fictícios, empresas, empregos, e-mails e telefones. Exemplos borrados identificados como fictícios; sem alegação de dados encontrados. Cada bloqueio abre o checkout.
 
