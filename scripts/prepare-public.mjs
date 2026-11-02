@@ -7,7 +7,7 @@ const {transformSync,buildSync}=require(require.resolve('esbuild',{paths:[requir
 buildSync({entryPoints:[new URL('../app/blog-render.ts',import.meta.url).pathname],outfile:new URL('../public/blog-render.js',import.meta.url).pathname,bundle:true,format:'iife',globalName:'BlogTemplates',minify:true,target:'es2020'});
 const source=readFileSync(new URL('../public/interface.html',import.meta.url),'utf8');
 const root=new URL('../',import.meta.url),publicDir=new URL('../public/',import.meta.url);
-const css=[...source.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)].map(m=>m[1]).join('\n').replace(/url\(wave\.svg\)/g,'url(/wave.svg)');
+const css=([...source.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)].map(m=>m[1]).join('\n')+'\n'+readFileSync(new URL('../public/live-consultation.css',import.meta.url),'utf8')).replace(/url\(wave\.svg\)/g,'url(/wave.svg)');
 const scripts=[...source.matchAll(/<script([^>]*)>([\s\S]*?)<\/script>/g)].map(m=>{const src=m[1].match(/src="([^"?]+)"/);return src?readFileSync(new URL('public/'+src[1].replace(/^\//,''),root),'utf8'):m[2]}).join('\n;\n');
 const js=transformSync(scripts,{minify:true,target:'es2020',loader:'js'}).code;
 const style=transformSync(css,{minify:true,loader:'css'}).code;
