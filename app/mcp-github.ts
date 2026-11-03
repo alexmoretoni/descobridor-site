@@ -2,8 +2,12 @@ import {config,githubToken} from './mcp-control';
 import {branch as branchSchema} from './mcp-contract';
 export async function gh(path:string,method='GET',body?:unknown){
  const token=await githubToken();if(!token)throw Error('Configure GITHUB_MCP_TOKEN na hospedagem ou conecte com token pelo admin. A conexão GitHub do chat não é uma credencial do servidor.');
- const c=await config();const r=await fetch('https://api.github.com/repos/'+c.repository+path,{method,redirect:'error',signal:AbortSignal.timeout(20000),headers:{Authorization:'Bearer '+token,Accept:'application/vnd.github+json','X-GitHub-Api-Version':'2026-03-10','User-Agent':'Descobridor-MCP','Content-Type':'application/json'},...(body===undefined?{}:{body:JSON.stringify(body)})});
- if(!r.ok)throw Error('GitHub recusou a operação (HTTP '+r.status+'). Confira permissões, branch e configuração.');if(r.status===204)return {accepted:true};return r.json() as Promise<any>;
+ const c=await config();const r=await fetch('https://api.github.com/repos/'+c.repository+path,{method,redirect:'manual',signal:AbortSignal.timeout(20000),headers:{Authorization:'Bearer '+token,Accept:'application/vnd.github+json','X-GitHub-Api-Version':'2026-03-10','User-Agent':'Descobridor-MCP','Content-Type':'application/json'},...(body===undefined?{}:{body:JSON.stringify(body)})});
+ if(r.status>=300&&r.status<400)throw Error('O GitHub redirecionou a requisição. Confira se o proprietário e o nome atual do repositório estão corretos.');
+ if(r.status===401)throw Error('O GitHub rejeitou a credencial (HTTP 401). Verifique o token do servidor em Admin → Plugin MCP.');
+ if(r.status===403)throw Error('O GitHub bloqueou a operação (HTTP 403). Confira as permissões do token, as restrições da conta e o limite da API.');
+ if(r.status===404)throw Error('O GitHub não encontrou o recurso (HTTP 404). Confira o repositório, a branch e o acesso do token.');
+ if(!r.ok)throw Error('GitHub recusou a operação (HTTP '+r.status+').');if(r.status===204)return {accepted:true};return r.json() as Promise<any>;
 }
 const enc=encodeURIComponent;
 export const toBase64=(s:string)=>{const bytes=new TextEncoder().encode(s);let binary='';for(const b of bytes)binary+=String.fromCharCode(b);return btoa(binary);};
