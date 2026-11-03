@@ -9,7 +9,7 @@
  function ensureTidio(){
   if(!publicConfig.tidioEnabled||tidioScheduled||document.getElementById('tidio-chat-code')||['admin','cliente'].includes((location.pathname.split('/')[1]||''))||['termos','privacidade'].includes(cmsSlug))return;
   tidioScheduled=true;
-  const run=()=>{tidioScheduled=false;if(!publicConfig.tidioEnabled||document.getElementById('tidio-chat-code'))return;const script=document.createElement('script');script.id='tidio-chat-code';script.src='https://code.tidio.co/fclewtlrwrgnuzqzajk10e8qsutvxpjc.js';script.async=true;document.body.append(script)};
+  const run=()=>{tidioScheduled=false;if(!publicConfig.tidioEnabled||document.getElementById('tidio-chat-code'))return;const script=document.createElement('script');script.id='tidio-chat-code';script.src='/api/tidio';script.async=true;document.body.append(script)};
   if(typeof window.requestIdleCallback==='function')window.requestIdleCallback(run,{timeout:1800});else setTimeout(run,300);
  }
  function flush(){const frame=document.getElementById('analyticsframe');if(!frame||!ready)return;for(const [id,event] of pending)frame.contentWindow.postMessage({type:'descobridor-analytics-event',id,event},location.origin)}
