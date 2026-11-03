@@ -3,6 +3,8 @@ import {getDb} from '../db';
 import {siteSettings} from '../db/schema';
 import {and,eq} from 'drizzle-orm';
 
+export const tidioSrc='https://code.tidio.co/fclewtlrwrgnuzqzajk10e8qsutvxpjc.js';
+
 const script=z.object({
  id:z.string().uuid(),name:z.string().trim().min(1).max(80),enabled:z.boolean(),
  src:z.string().trim().default('').transform(value=>value.startsWith('//')?'https:'+value:value).pipe(z.string().max(500)),
@@ -16,6 +18,10 @@ export const scriptsSchema=z.array(script).max(5).superRefine((items,ctx)=>{
  if(new Set(items.map(x=>x.id)).size!==items.length)ctx.addIssue({code:'custom',message:'Identificadores duplicados.'});
 });
 export type CustomScript=z.infer<typeof script>;
+export function isTidioScript(value:CustomScript){
+ const code=value.code.replace(/\s/g,'');
+ return value.src===tidioSrc||code.includes(tidioSrc.replace(/\s/g,''));
+}
 
 export async function readCustomScripts(){
  const [row]=await getDb().select().from(siteSettings).where(eq(siteSettings.id,'custom-scripts'));
