@@ -9,7 +9,7 @@ const script=z.object({
  code:z.string().max(4000).default(''),
 }).strict().superRefine((value,ctx)=>{
  if(!value.src&&!value.code)ctx.addIssue({code:'custom',message:'Informe uma URL HTTPS ou JavaScript.'});
- if(value.src){try{const u=new URL(value.src);if(u.protocol!=='https:'||u.username||u.password||u.port||u.hash)throw Error();}catch{ctx.addIssue({code:'custom',message:'Use uma URL HTTPS válida, sem usuário, senha ou fragmento.'});}}
+ if(value.src){try{const u=new URL(value.src);if(!/^https:\/\//i.test(value.src)||u.username||u.password||u.port||u.hash)throw Error();}catch{ctx.addIssue({code:'custom',message:'Use uma URL HTTPS válida, sem usuário, senha ou fragmento.'});}}
  if(/<\/?script\b/i.test(value.code))ctx.addIssue({code:'custom',message:'Cole somente o JavaScript, sem tags <script>.'});
 });
 export const scriptsSchema=z.array(script).max(5).superRefine((items,ctx)=>{

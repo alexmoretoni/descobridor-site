@@ -68,6 +68,7 @@ try{
  assert.equal(loaded.scripts[0].src,'https://example.org/tag.js');
  assert.equal((await save(loaded,'https://example.org')).status,400);
  assert.equal((await save({...loaded,scripts:[{...tag,src:'javascript:alert(1)'}]})).status,400);
+ assert.equal((await save({...loaded,scripts:[{...tag,src:'https:example.org/tag.js'}]})).status,400);
  const saved=await save(loaded);
  assert.equal(saved.status,200);
  const current=await saved.json();
