@@ -1,3 +1,4 @@
+import {registeredCustomer} from '../../customer-registration';
 import {resolveQuote} from '../../commerce';
 import {getPage} from '../../pages';
 import {identity} from '../../access';
@@ -12,8 +13,9 @@ export async function POST(request: Request) {
  if(!request.headers.get('content-type')?.includes('application/json'))return Response.json({error:'Formato inválido.'},{status:415});
  if(Number(request.headers.get('content-length')||0)>4096)return Response.json({error:'Pedido muito grande.'},{status:413});
  let body; try{const raw=await request.text();if(raw.length>4096)throw Error();body=JSON.parse(raw)}catch{return Response.json({error:'Pedido inválido.'},{status:400})}
+ const registered=await registeredCustomer(request);if(!registered)return Response.json({error:'É necessário criar sua conta antes de solicitar o relatório.'},{status:403});
  const delivery=body.deliveryFlow==='whatsapp';
- const name=String(body.name||'').trim()||(delivery?'Nome não informado':''),phone=String(body.phone||'').replace(/\D/g,''),email=String(body.email||'').trim();
+ const name=registered.name,phone=registered.phone,email=registered.email;
  const key=String(body.idempotencyKey||'');
  const validEmail=delivery&&!email||/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
  if(delivery&&!/^(?:55)?[1-9]{2}(?:9\d{8}|[2-5]\d{7})$/.test(phone))return Response.json({error:'Informe um telefone válido com DDD.'},{status:400});
