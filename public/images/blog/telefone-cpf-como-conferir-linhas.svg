@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-labelledby="t d"><title id="t">CONFIRA SUAS LINHAS: TRÊS ETAPAS SIMPLES</title><desc id="d">Passo a passo para conferir pré-pagos no próprio CPF</desc><defs><linearGradient id="g" x2="1" y2="1"><stop stop-color="#14243F"/><stop offset="1" stop-color="#274A73"/></linearGradient><pattern id="dots" width="38" height="38" patternUnits="userSpaceOnUse"><circle cx="3" cy="3" r="2" fill="#8DC4FF" opacity=".15"/></pattern></defs><rect width="1200" height="675" fill="url(#g)"/><rect width="1200" height="675" fill="url(#dots)"/><circle cx="1132" cy="-10" r="300" fill="#8DC4FF" opacity=".06"/><circle cx="85" cy="630" r="210" fill="#8DC4FF" opacity=".07"/><path d="M65 102h70" stroke="#8DC4FF" stroke-width="10" stroke-linecap="round"/><text x="65" y="160" font-family="Arial,sans-serif" font-size="20" letter-spacing="3" font-weight="700" fill="#8DC4FF">DESCOBRIDOR · GUIA</text><text x="65" y="262" font-family="Arial,sans-serif" font-size="42" font-weight="700" fill="#FFFFFF">CONFIRA SUAS LINHAS</text><text x="65" y="319" font-family="Arial,sans-serif" font-size="26" font-weight="600" fill="#8DC4FF">TRÊS ETAPAS SIMPLES</text><path d="M65 376h320" stroke="#8DC4FF" stroke-width="2" opacity=".65"/><text x="65" y="421" font-family="Arial,sans-serif" font-size="18" fill="#FFFFFF">Orientação responsável</text><text x="65" y="455" font-family="Arial,sans-serif" font-size="18" fill="#FFFFFF">Fontes oficiais e privacidade</text><g font-family="Arial,sans-serif" text-anchor="middle">
+<rect x="535" y="132" width="187" height="302" rx="28" fill="#E8F2FF"/>
+<rect x="563" y="173" width="131" height="179" rx="16" fill="#B9D7F5"/>
+<path d="M590 235l27 26 49-56" stroke="#235A91" stroke-width="15" fill="none" stroke-linejoin="round"/>
+<text x="629" y="388" font-size="18" font-weight="700" fill="#1D4B70">CPF PRÓPRIO</text>
+<rect x="755" y="238" width="198" height="171" rx="25" fill="#92C9FB"/>
+<rect x="779" y="268" width="150" height="97" rx="12" fill="#E8F2FF"/>
+<path d="M798 310h111m-111 26h75" stroke="#76AADA" stroke-width="12" stroke-linecap="round"/>
+<path d="M729 325h25m-12-12l12 12-12 12" stroke="#E8F2FF" stroke-width="8" fill="none" stroke-linecap="round"/>
+<circle cx="998" cy="325" r="73" fill="#D9EBFF"/><path d="M969 327l20 19 40-46" stroke="#27699D" stroke-width="13" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="614" y="495" font-size="17" font-weight="700" fill="#EAF5FF">1. INFORME O CPF</text>
+<text x="838" y="495" font-size="17" font-weight="700" fill="#EAF5FF">2. CONSULTE</text>
+<text x="1013" y="545" font-size="17" font-weight="700" fill="#EAF5FF">3. CONFIRME</text>
+</g><text x="65" y="620" font-family="Arial,sans-serif" font-size="18" fill="#FFFFFF" opacity=".7">descobridor.online</text></svg>
