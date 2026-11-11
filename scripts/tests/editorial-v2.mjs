@@ -1,0 +1,16 @@
+import assert from 'node:assert/strict';
+import {readFileSync,existsSync} from 'node:fs';
+const render=readFileSync('app/editorial-v2.ts','utf8');
+const css=readFileSync('app/editorial-v2-css.ts','utf8');
+const script=readFileSync('public/editorial-v2.js','utf8');
+const blog=readFileSync('app/blog-render.ts','utf8');
+const page=readFileSync('app/site-page.tsx','utf8');
+for(const word of ['data-editorial-v2','ep-more','<details','aria-pressed="false"','aria-label="Neste artigo"','rel="noopener noreferrer"','editorialRichText'])assert(render.includes(word),word);
+for(const word of ['@media(max-width:760px)','prefers-reduced-motion','focus-visible'])assert(css.includes(word),word);
+assert(script.includes('requestAnimationFrame'));
+assert(script.includes('history.replaceState'));
+assert(blog.includes("return editorialArticle(p,pages)"));
+assert(page.includes('/editorial-v2.js'));
+assert(existsSync('public/images/blog/descobrir-cpf-pelo-nome-editorial.svg'));
+assert(existsSync('public/images/blog/descobrir-cpf-comparativo.svg'));
+console.log('Editorial V2: verificações estáticas concluídas.');
