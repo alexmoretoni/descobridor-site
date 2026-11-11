@@ -1,0 +1,10 @@
+import assert from 'node:assert/strict';
+import {readFileSync,existsSync} from 'node:fs';
+const code=readFileSync('app/editorial-v2.ts','utf8');
+const blog=readFileSync('app/blog-render.ts','utf8');
+const page=readFileSync('app/site-page.tsx','utf8');
+for(const path of ['public/images/blog/data-nascimento-nome-editorial.svg','public/images/blog/data-nascimento-caminhos.svg'])assert(existsSync(path),path);
+for(const x of ["const isBirth=","isBirth?'/images/blog/data-nascimento-caminhos.svg'","isBirth?'/images/blog/data-nascimento-nome-editorial.svg'","perguntas frequentes do Registro Civil","orientações do CNJ"])assert(code.includes(x),x);
+assert(blog.includes("'como-descobrir-data-de-nascimento-pelo-nome'"));
+assert(page.includes("'como-descobrir-data-de-nascimento-pelo-nome'"));
+console.log('Editorial para data de nascimento: estrutura, imagens e links verificados.');
