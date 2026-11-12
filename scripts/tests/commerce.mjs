@@ -13,7 +13,7 @@ globalThis.__commerceEnv={ADMIN_EMAIL:'admin@example.com',ADMIN_SESSION_SECRET:'
 globalThis.__commerceHeaders=new Headers();
 const plugin={name:'runtime-mock',setup(b){b.onResolve({filter:/^(cloudflare:workers|next\/headers|next\/navigation)$/},a=>({path:a.path,namespace:'mock'}));b.onLoad({filter:/.*/,namespace:'mock'},a=>({contents:a.path==='cloudflare:workers'?'export const env=globalThis.__commerceEnv':a.path==='next/headers'?'export async function headers(){return globalThis.__commerceHeaders}':'export function redirect(p){throw Error(p)}',loader:'js'}));}};
 async function bundle(entry,n){const outfile=join(temp,n+'.mjs');await build({entryPoints:[entry],outfile,platform:'node',format:'esm',bundle:true,plugins:[plugin],logLevel:'silent'});return import(pathToFileURL(outfile));}
-const request=(path,body,origin='https://test.local')=>new Request('https://test.local'+path,{method:'POST',headers:{origin,'content-type':'application/json'},body:JSON.stringify(body)});
+const checkoutToken='98765432-4321-4321-8321-abcdefabcdef';const request=(path,body,origin='https://test.local')=>new Request('https://test.local'+path,{method:'POST',headers:{origin,'content-type':'application/json',...(path==='/api/orders'?{cookie:'descobridor_customer='+checkoutToken}:{})},body:JSON.stringify(body)});
 try{
  const commerce=await bundle('app/commerce.ts','commerce'),admin=await bundle('app/api/commerce/route.ts','admin'),quoteApi=await bundle('app/api/quote/route.ts','quote'),order=await bundle('app/api/orders/route.ts','orders'),security=await bundle('app/admin-security.ts','security');
  assert.equal((await admin.GET()).status,403);
@@ -40,7 +40,8 @@ try{
  assert.equal((await quoteApi.GET(new Request('https://test.local/api/quote?type=invalid'))).status,400);
  await assert.rejects(()=>commerce.resolveQuote({queryType:'CPF',pageSlug:'does-not-exist'}));
  await assert.rejects(()=>commerce.resolveQuote({queryType:'CPF',pageSlug:'home',productId:'other'}));
- // Anonymous checkout uses the exact server quote and ignores a forged amount.
+ // Registered checkout uses the exact server quote and ignores a forged amount.
+ db.prepare('INSERT INTO customers (id,name,email,phone,created_at,updated_at) VALUES (?,?,?,?,?,?)').run('registration-'+checkoutToken,'Cliente Teste','cliente@example.com','47999999999',new Date().toISOString(),new Date().toISOString());
  globalThis.__commerceHeaders=new Headers();
  const body={phone:'47999999999',name:'',email:'',deliveryFlow:'whatsapp',consent:true,queryType:'CPF',queryMasked:'***.***.***-91',pageSlug:'home',idempotencyKey:crypto.randomUUID(),quoteKey:q.quoteKey,amountCents:1};
  let response=await order.POST(request('/api/orders',body));assert.equal(response.status,200);const saved=await response.json();
