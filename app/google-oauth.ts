@@ -4,7 +4,7 @@ import {siteSettings} from '../db/schema';
 import {eq} from 'drizzle-orm';
 export const origin='https://descobridor.online';
 export const redirectUri=origin+'/api/google/callback';
-export const scopes=['https://www.googleapis.com/auth/analytics.readonly','https://www.googleapis.com/auth/webmasters.readonly'];
+export const scopes=['https://www.googleapis.com/auth/analytics.readonly','https://www.googleapis.com/auth/webmasters.readonly','https://www.googleapis.com/auth/adwords'];
 const enc=new TextEncoder(),dec=new TextDecoder();
 export const b64=(v:Uint8Array)=>btoa(String.fromCharCode(...v)).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
 const bytes=(v:string)=>Uint8Array.from(atob(v.replace(/-/g,'+').replace(/_/g,'/')),x=>x.charCodeAt(0));
