@@ -6,7 +6,7 @@ const number=(n:number)=>new Intl.NumberFormat('pt-BR',{maximumFractionDigits:2}
 export default function AdsIntelligence(){
  const [state,setState]=useState<any>(null),[customerId,setCustomerId]=useState(''),[loginCustomerId,setLoginCustomerId]=useState(''),[result,setResult]=useState<any>(null),[error,setError]=useState(''),[loading,setLoading]=useState(false);
  useEffect(()=>{fetch('/api/ads-intelligence').then(r=>r.json()).then(setState).catch(()=>setError('Falha ao verificar integração.'))},[]);
- async function load(){setLoading(true);setError('');setResult(null);try{const r=await fetch('/api/ads-intelligence',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({customerId,loginCustomerId})});const data=await r.json();if(!r.ok)throw Error(data.error||'Erro ao consultar campanhas.');setResult(data)}catch(e){setError(e instanceof Error?e.message:'Erro inesperado.')}finally{setLoading(false)}}
+ async function load(){setLoading(true);setError('');setResult(null);try{const r=await fetch('/api/ads-intelligence',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({customerId,loginCustomerId})});const data:any=await r.json();if(!r.ok)throw Error(data.error||'Erro ao consultar campanhas.');setResult(data)}catch(e){setError(e instanceof Error?e.message:'Erro inesperado.')}finally{setLoading(false)}}
  const rows:Campaign[]=result?.campaigns||[];
  const total=rows.reduce((a,c)=>({cost:a.cost+c.cost,clicks:a.clicks+c.clicks,conversions:a.conversions+c.conversions,value:a.value+c.value}),{cost:0,clicks:0,conversions:0,value:0});
  const insights=rows.filter(c=>c.cost>0&&c.conversions===0).sort((a,b)=>b.cost-a.cost).slice(0,5);
