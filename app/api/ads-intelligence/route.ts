@@ -20,7 +20,7 @@ export async function POST(request:Request){
   const token=await accessToken(user.userId);
   const headers:Record<string,string>={'Authorization':'Bearer '+token,'developer-token':developerToken,'Content-Type':'application/json'};
   if(loginCustomerId)headers['login-customer-id']=loginCustomerId;
-  const query="SELECT campaign.id, campaign.name, campaign.status, campaign.advertising_channel_type, metrics.impressions, metrics.clicks, metrics.cost_micros, metrics.conversions, metrics.conversions_value FROM campaign WHERE segments.date DURING LAST_30_DAYS ORDER BY metrics.cost_micros DESC LIMIT 100";
+  const query="SELECT campaign.id, campaign.name, campaign.status, campaign.advertising_channel_type, metrics.impressions, metrics.clicks, metrics.cost_micros, metrics.conversions, metrics.conversions_value FROM campaign WHERE campaign.advertising_channel_type = 'SEARCH' AND segments.date DURING LAST_30_DAYS ORDER BY metrics.cost_micros DESC LIMIT 100";
   const response=await fetch('https://googleads.googleapis.com/v26/customers/'+customerId+'/googleAds:searchStream',{method:'POST',headers,body:JSON.stringify({query}),signal:AbortSignal.timeout(20000)});
   const result:any=await response.json().catch(()=>({}));
   if(!response.ok){const msg=String(result.error?.message||'Falha ao consultar Google Ads. Verifique OAuth com escopo adwords, token e permissões da conta.');return json({error:msg.slice(0,400)},response.status===401?401:400)}
