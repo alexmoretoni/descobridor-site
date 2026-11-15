@@ -2,9 +2,10 @@
 import {readFileSync,writeFileSync,readdirSync,unlinkSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {createRequire} from 'node:module';
+import {fileURLToPath} from 'node:url';
 const require=createRequire(import.meta.url);
 const {transformSync,buildSync}=require(require.resolve('esbuild',{paths:[require.resolve('vite')]}));
-buildSync({entryPoints:[new URL('../app/blog-render.ts',import.meta.url).pathname],outfile:new URL('../public/blog-render.js',import.meta.url).pathname,bundle:true,format:'iife',globalName:'BlogTemplates',minify:true,target:'es2020'});
+buildSync({entryPoints:[fileURLToPath(new URL('../app/blog-render.ts',import.meta.url))],outfile:fileURLToPath(new URL('../public/blog-render.js',import.meta.url)),bundle:true,format:'iife',globalName:'BlogTemplates',minify:true,target:'es2020'});
 const source=readFileSync(new URL('../public/interface.html',import.meta.url),'utf8');
 const root=new URL('../',import.meta.url),publicDir=new URL('../public/',import.meta.url);
 const css=([...source.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)].map(m=>m[1]).join('\n')+'\n'+readFileSync(new URL('../public/live-consultation.css',import.meta.url),'utf8')).replace(/url\(wave\.svg\)/g,'url(/wave.svg)');
